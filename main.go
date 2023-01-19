@@ -69,21 +69,21 @@ func main() {
 
 	http.HandleFunc("/readme-stats", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", readmeStats.ContentType)
-		w.WriteHeader(http.StatusAccepted)
+		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(*readmeStats.Content)
 		updates <- readmeStats
 	})
 
 	http.HandleFunc("/top-langs", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", readmeStats.ContentType)
-		w.WriteHeader(http.StatusAccepted)
+		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(*topLangs.Content)
 		updates <- topLangs
 	})
 
 	http.HandleFunc("/streak-stats", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", readmeStats.ContentType)
-		w.WriteHeader(http.StatusAccepted)
+		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(*streakStats.Content)
 		updates <- streakStats
 	})
