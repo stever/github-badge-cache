@@ -10,27 +10,29 @@ import (
 )
 
 type item struct {
-	URL     string
-	Content *[]byte
+	URL         string
+	Content     *[]byte
+	ContentType string
 }
 
-func get(url string) *[]byte {
-	fmt.Printf("Fetching %s\n", url)
+func refresh(item *item) {
+	fmt.Printf("Fetching %s\n", item.URL)
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(item.URL)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
-		return nil
+		return
 	}
 
 	b, err := io.ReadAll(resp.Body)
 	_ = resp.Body.Close()
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
-		return nil
+		_, _ = fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", item.URL, err)
+		return
 	}
 
-	return &b
+	item.ContentType = resp.Header.Get("Content-Type")
+	item.Content = &b
 }
 
 var readmeStats item
@@ -43,7 +45,7 @@ func worker(updates <-chan item) {
 	fmt.Println("Register the worker")
 	for item := range updates {
 		fmt.Println("Worker processing job", item)
-		item.Content = get(item.URL)
+		refresh(&item)
 	}
 }
 
@@ -57,23 +59,30 @@ func main() {
 	streakStats = item{URL: "https://github-readme-streak-stats.stever.dev?user=stever&theme=vision-friendly-dark&date_format=j%20M%5B%20Y%5D&mode=weekly"}
 
 	// Pre-populate the cache.
-	readmeStats.Content = get(readmeStats.URL)
-	topLangs.Content = get(topLangs.URL)
-	streakStats.Content = get(streakStats.URL)
+	refresh(&readmeStats)
+	refresh(&topLangs)
+	refresh(&streakStats)
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "https://github.com/stever/github-badge-cache", http.StatusTemporaryRedirect)
+	})
 
 	http.HandleFunc("/readme-stats", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", readmeStats.ContentType)
 		w.WriteHeader(http.StatusAccepted)
 		_, _ = w.Write(*readmeStats.Content)
 		updates <- readmeStats
 	})
 
 	http.HandleFunc("/top-langs", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", readmeStats.ContentType)
 		w.WriteHeader(http.StatusAccepted)
 		_, _ = w.Write(*topLangs.Content)
 		updates <- topLangs
 	})
 
 	http.HandleFunc("/streak-stats", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", readmeStats.ContentType)
 		w.WriteHeader(http.StatusAccepted)
 		_, _ = w.Write(*streakStats.Content)
 		updates <- streakStats
