@@ -16,7 +16,7 @@ type item struct {
 }
 
 func refresh(item *item) {
-	fmt.Printf("Fetching %s\n", item.URL)
+	//fmt.Printf("Fetching %s\n", item.URL)
 
 	resp, err := http.Get(item.URL)
 	if err != nil {
@@ -42,9 +42,9 @@ var streakStats item
 var updates chan item
 
 func worker(updates <-chan item) {
-	fmt.Println("Register the worker")
+	//fmt.Println("Register the worker")
 	for item := range updates {
-		fmt.Println("Worker processing job", item)
+		//fmt.Println("Worker processing job", item)
 		refresh(&item)
 	}
 }
