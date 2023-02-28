@@ -65,9 +65,9 @@ func main() {
 	go worker(updates)
 
 	// These are the badges that are going to be provided.
-	readmeStats = item{URL: "https://github-readme-stats.stever.dev/api?username=stever&count_private=true&show_icons=true&theme=vision-friendly-dark&hide_title=true"}
-	topLangs = item{URL: "https://github-readme-stats.stever.dev/api/top-langs/?username=stever&langs_count=10&layout=compact&theme=vision-friendly-dark&custom_title=Top%20Languages&hide=css,html,scss,Vim%20Script,PLpgSQL,NSIS,ANTLR,Dockerfile,LESS,Jupyter%20Notebook,CMake,QML,Batchfile,Makefile,Shell"}
-	streakStats = item{URL: "https://github-readme-streak-stats.stever.dev?user=stever&theme=vision-friendly-dark&date_format=j%20M%5B%20Y%5D&mode=weekly"}
+	readmeStats = item{URL: "https://github-readme-stats.vercel.app/api?username=stever&count_private=true&show_icons=true&theme=vision-friendly-dark&hide_title=true"}
+	topLangs = item{URL: "https://github-readme-stats.vercel.app/api/top-langs/?username=stever&langs_count=10&layout=compact&theme=vision-friendly-dark&custom_title=Top%20Languages&hide=css,html,scss,Vim%20Script,PLpgSQL,NSIS,ANTLR,Dockerfile,LESS,Jupyter%20Notebook,CMake,QML,Batchfile,Makefile,Shell"}
+	streakStats = item{URL: "https://streak-stats.demolab.com/?user=stever&theme=vision-friendly-dark&date_format=j%20M%5B%20Y%5D&mode=weekly"}
 	emailShield = item{URL: "https://img.shields.io/badge/-stever%40hey.com-5522fa?style=flat&label=&labelColor=white&logo=Hey&logoColor=5522fa"}
 	linkedinShield = item{URL: "https://img.shields.io/badge/-csteve-2266c2?style=flat&logo=Linkedin&logoColor=white"}
 	mastoShield = item{URL: "https://img.shields.io/badge/-%40stever%40hachyderm.io-5538c7?style=flat&label=&labelColor=white&logo=Mastodon&logoColor=5538c7"}
